@@ -9,6 +9,12 @@ La compilación y ejecución se realiza de forma automática gracias a la herram
 Esta práctica perteneciente al laboratorio de la asignatura de Diseño de Infraestructura de Redes (DIR) de ESI - UCLM.  
 Es una simulación de una *Red Toroidal* o de anillo, mediante la utilización de programación paralela **MPI** en lenguaje C.
 
+## Requerimientos
+* Tener instalado *MPI*.
+
+* Tener instalada la libreria *libx11*  
+*$ sudo apt-get install libx11-dev*
+
 ## Creación de directorios necesarios
 Con este comando se crearan los diferentes directorios entre ellos el directorio que contiene el archivo ejecutable del programa.  
 **$ make dirs**  
