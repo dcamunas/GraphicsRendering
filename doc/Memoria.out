@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section.1}{Enunciado}{}% 1
+\BOOKMARK [1][-]{section.2}{Introducci\363n}{}% 2
+\BOOKMARK [1][-]{section.3}{Planteamiento de la soluci\363n}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Tipos de nodos}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Algoritmos principales}{section.3}% 5
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Obtenci\363n de los vecinos}{subsection.3.2}% 6
+\BOOKMARK [3][-]{subsubsection.3.2.2}{C\341lculo del n\372mero m\355nimo}{subsection.3.2}% 7
+\BOOKMARK [1][-]{section.4}{Dise\361o de la soluci\363n}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{Funci\363n principal del programa \(main\)}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Lectura del fichero \(load-data\)}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.3}{Comprobaci\363n de la cantidad de n\372meros \(check-size\)}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.4}{Envio de su n\372mero a cada nodo \(send-numbers\)}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.5}{Obtenci\363n de los vecinos \(get-neighbors\)}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.6}{C\341lculo del n\372mero m\355nimo \(calculate-min\)}{section.4}% 14
+\BOOKMARK [3][-]{subsubsection.4.6.1}{Mejora del algoritmo}{subsection.4.6}% 15
+\BOOKMARK [3][-]{subsubsection.4.6.2}{Representaci\363n del flujo de eventos de envio y recepci\363n}{subsection.4.6}% 16
+\BOOKMARK [1][-]{section*.2}{Referencias}{}% 17

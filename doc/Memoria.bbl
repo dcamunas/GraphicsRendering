@@ -1,0 +1,32 @@
+\begin{thebibliography}{1}
+
+\bibitem{transpas}
+Javier Ayllón.
+\newblock Topologías de redes - practica 1 - diseño de infraestructuras de
+  redes.
+
+\bibitem{mpi_bcast}
+\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Bcast}.
+\newblock Broadcast mpi.
+
+\bibitem{mpi_rank}
+\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Comm_rank}.
+\newblock Determinar \textit{rank} mpi.
+
+\bibitem{mpi_size}
+\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Comm_size}.
+\newblock Determinar tamaño del comunicador mpi.
+
+\bibitem{mpi_init}
+\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Init}.
+\newblock Inicialización mpi.
+
+\bibitem{mpi_recv}
+\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Recv}.
+\newblock Recepción mpi.
+
+\bibitem{mpi_send}
+\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Send}.
+\newblock Envío mpi.
+
+\end{thebibliography}
