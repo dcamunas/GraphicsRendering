@@ -21,7 +21,7 @@ test:
 	$(RUN) -np 2 ./$(DIREXE)pract2
 
 solution:
-	$(RUN) -np 1 ./$(DIREXE)pract2 
+	$(RUN) -np 1 ./$(DIREXE)pract2 B
 
 clean : 
 	rm -rf *~ core $(DIROBJ) $(DIREXE) $(DIRHEA)*~ $(DIRSRC)*~ 

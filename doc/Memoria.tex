@@ -111,7 +111,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%				Principales variables del documento			   %%%%%%%%%
 
-\title{Práctica 1: Red Toroidal}							% Titulo
+\title{Práctica 2: Renderizado Gráfico}							% Titulo
 \author{David Camuñas Sánchez}							% Autor
 
 \date{18 de marzo de 2020}											% Fecha
@@ -150,7 +150,7 @@
 \ifmultipleauthors
 	\chead{\thetitle}
 \else
-	\rhead{\theauthor}
+	\rhead{\subject}
 	\lhead{\thetitle}
 \fi
 \cfoot{\thepage}
@@ -215,32 +215,51 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%							Documento						   %%%%%%%%%
 \section{Enunciado}
-Dado un archivo con nombre \textit{datos.dat}, cuyo contenido es una lista de valores separados por comas, nuestro programa realizará lo siguiente: El proceso de rank 0 destribuirá a cada uno de los nodos de un toroide de lado L,los L x L numeros reales que estarán contenidos en el archivo datos.dat. En caso de que no se hayan lanzado suficientes elementos de proceso
-para los datos del programa, éste emitirá un error y todos los procesos finalizarán. En caso de que todos los procesos han recibido su correspondiente elemento,comenzará el proceso normal del programa. Se pide calcular el elemento menor de toda la red, el elemento de proceso con rank 0 mostrará en su salida estándar el valor obtenido. 
-La complejidad del algoritmo no superará O( n) Con n número de elementos de la red.
+Utilizaremos las primitivas pertinentes \textbf{\textit{MPI2}} como acceso paralelo a disco y
+gestión de procesos dinámico:\\
+Inicialmente el usuario lanzará un solo proceso mediante \textit{mpirun -np 1
+./pract2}. Con ello MPI lanza un primer proceso que será el que tiene acceso a
+la pantalla de gráficos pero no a disco. Él mismo será el encargado de levantar
+N procesos (con N definido en tiempo de compilación como una constante) que
+tendrán acceso a disco pero no a gráficos directamente.
 
+Los nuevos procesos lanzados se encargarán de leer de forma paralela
+los datos del archivo foto.dat. Después, se encargarán de ir enviando los pixels
+al primer elemento de proceso para que éste se encargue de representarlo en
+pantalla.
 
+Usaremos la plantilla pract2.c para comenzar a desarrollar la práctica.
+En ella debemos completar el código que ejecuta el proceso con acceso a la
+ventana de gráficos (rank 0 inicial) y la de los procesos “trabajadores”.
+Se proporciona el archivo foto.dat. La estructura interna de este archivo
+es 400 filas por 400 columnas de puntos.\\
+Cada punto está formado por una
+tripleta de tres “unsigned char” correspondiendo al valor R,G y B de cada uno
+de los colores primarios. Estos valores se pueden usar para la función
+\textit{dibujaPunto}().
+
+\newpage
 % Sección: Intruducción
 \section{Introducción}
-El objetivo de esta práctica es la creación de uno de los tipos de redes de comunicación existente, esta es la \textbf{\textit{Red Toroidal}} \cite{transpas} o de \textit{Anillo}.
+El objetivo de esta práctica es la creación de un programa de rendrerizado gráfico, mediante el uso de las \textit{funciones} que nos ofrece \textbf{\textit{MPI}}.
 
-A la hora de dibujar este tipo de red para entender su funcionamiento, se puede mostrar como una matriz. 
+A la hora de analizar una imagen, en este caso foto.dat, se puede tratar como si fuese una matriz de \textit{X} (filas) por \textit{Y} (columnas) dimensiones. En este caso, se trata de una matriz cuadrada de \textit{400 píxeles}, es decir, donde tanto el valor de las \textbf{filas} y \textbf{columnas} es de \textbf{400}. Por tanto el número total de pixeles que forman la matriz, es \textbf{$400^2$} \textit{($L^2$)} = \textbf{160000 píxeles}.\\
+Estos valores estan indicados en el programa, en forma de constantes, en concreto, en el archivo \textit{include/definitions.h}.\\
 
-Cuya peculiaridad es que son redes cuadradas, de \textit{lado} \textit{\textbf{L}}, donde cada fila o columna de un extremo, conecta con su fila o columna inversa, es decir, los elementos que formarían la última fila de la matriz se conectarían (serían \textit{"vecinos"}) con los elementos de la primera fila de la matriz y asi sucesivamente.
+En la Figura \ref{fig:intro}, se puede observar la estructura de una imagen junto con la imagen a renderizar. Donde cada píxel está formado por una
+tripleta de tres parámetros de tipo “\textit{unsigned char}” correspondiendo al valor R,G y B de cada uno de los \textit{colores primarios}.
 
-A continuación, se mostrará un ejemplo donde se puede observar la estructura de este tipo de red.
-
-\begin{figure}[h!]
+\begin{figure}[H]
   \centering
-  \subfigure[Red toroidal en 3D]{
-    \includegraphics[width=50mm]{toroide.png}
+  \subfigure[Pixeles de una imagen]{
+    \includegraphics[width=70mm]{pixeles.jpg}
   }
-  \subfigure[Topología de una red toroidal]{
-  \includegraphics[width=50mm]{toroide-r.png}
+  \subfigure[Imagen a renderizar]{
+  \includegraphics[width=50mm]{cat.png}
   
   }
-  \caption{Imágenes red toroidal}
-  \label{fig:toroide}
+  \caption{Representación de píxeles que forman una imagen}
+  \label{fig:intro}
 \end{figure}
 
 \clearpage
