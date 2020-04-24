@@ -18,10 +18,10 @@ main:
 	$(CC) $(DIRSRC)pract2.c $(CFLAGS) $(LDLIBS) -o $(DIREXE)pract2
 
 test:
-	$(RUN) -n 2 ./$(DIREXE)pract2
+	$(RUN) -np 2 ./$(DIREXE)pract2
 
 solution:
-	$(RUN) -n 1 ./$(DIREXE)pract2 
+	$(RUN) -np 1 ./$(DIREXE)pract2 
 
 clean : 
 	rm -rf *~ core $(DIROBJ) $(DIREXE) $(DIRHEA)*~ $(DIRSRC)*~ 
