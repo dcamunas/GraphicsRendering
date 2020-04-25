@@ -10,6 +10,7 @@
 #define IMAGE_SIZE          IMAGE_SIDE * IMAGE_SIDE
 #define PRIMARY_COLORS_N    3
 #define IMAGE_PATH          "files/foto.dat"
+#define NATIVE_MOD          "native"
 
 
 /* Point info */
@@ -21,8 +22,9 @@
 #define B                   2
 
 /* Colors info*/
-#define SEPIA               'S'
-#define BLACK_WHITE         'B'
+#define SEPIA              'S'
+#define BLACK_WHITE        'B'
+#define DEFAULT            'D'
 
 /* Functions */
 int is_integer(char *variable)

@@ -17,11 +17,14 @@ dirs:
 main:
 	$(CC) $(DIRSRC)pract2.c $(CFLAGS) $(LDLIBS) -o $(DIREXE)pract2
 
-test:
-	$(RUN) -np 2 ./$(DIREXE)pract2
-
 solution:
-	$(RUN) -np 1 ./$(DIREXE)pract2 BlackAndWhite
+	$(RUN) -np 1 ./$(DIREXE)pract2
+
+solution_sepia:
+	$(RUN) -np 1 ./$(DIREXE)pract2 Sepia
+
+solution_blackwhite:
+	$(RUN) -np 1 ./$(DIREXE)pract2 BlackWhite
 
 clean : 
 	rm -rf *~ core $(DIROBJ) $(DIREXE) $(DIRHEA)*~ $(DIRSRC)*~ 

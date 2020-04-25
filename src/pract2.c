@@ -19,6 +19,7 @@ Display *dpy;
 Window w;
 GC gc;
 
+unsigned int parse_mode(char character);
 void initX();
 void dibujaPunto(int x, int y, int r, int g, int b);
 void calculate_file_lines(int *lines_per_employee, int *rest_lines, long *row_bytes);
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
             /* Codigo del maestro */
             initX();
             printf("[MAESTRO]: Lanzando [%d] TRABAJADORES...\n", EMPLOYEES_NUMBER);
-            MPI_Comm_spawn(EXEC_PATH, MPI_ARGV_NULL, EMPLOYEES_NUMBER, MPI_INFO_NULL, MASTER_RANK, MPI_COMM_WORLD, &commPadre, error_codes);
+            MPI_Comm_spawn(EXEC_PATH, argv, EMPLOYEES_NUMBER, MPI_INFO_NULL, MASTER_RANK, MPI_COMM_WORLD, &commPadre, error_codes);
 
             printf("[MAESTRO]: Dibujando imagen...\n");
             receive_points(commPadre);
@@ -57,8 +58,10 @@ int main(int argc, char *argv[])
 
       else
       {
+            char mode = argv[argc-1][0];
+
             /* Codigo de todos los trabajadores */
-            int lines_per_employee, rest_lines, start_line, end_line; 
+            int lines_per_employee, rest_lines, start_line, end_line;
             long row_bytes;
 
             calculate_file_lines(&lines_per_employee, &rest_lines, &row_bytes);
@@ -68,9 +71,9 @@ int main(int argc, char *argv[])
 
             MPI_File image;
             MPI_File_open(MPI_COMM_WORLD, IMAGE_PATH, MPI_MODE_RDONLY, MPI_INFO_NULL, &image);
-            MPI_File_set_view(image, rank * row_bytes, MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
+            MPI_File_set_view(image, rank * row_bytes, MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, NATIVE_MOD, MPI_INFO_NULL);
 
-            parse_image(rank, start_line, end_line, 'D', image, commPadre);
+            parse_image(rank, start_line, end_line, mode, image, commPadre);
       }
 
       MPI_Finalize();
@@ -154,6 +157,7 @@ void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm p
       point_to_paint[ROW] = row;
       point_to_paint[COLUMN] = column;
 
+      printf("%c\n", mode);
       switch (mode)
       {
       case SEPIA:
@@ -166,6 +170,7 @@ void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm p
             point_to_paint[R] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
             point_to_paint[G] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
             point_to_paint[B] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
+            break;
 
       default:
             point_to_paint[R] = pixel[R];
