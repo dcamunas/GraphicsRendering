@@ -3,7 +3,7 @@
 
 
 /* My constant's */
-#define EMPLOYEES_NUMBER    16
+//#define EMPLOYEES_NUMBER    16
 #define EXEC_PATH           "exec/pract2"
 #define MASTER_RANK         0
 #define IMAGE_SIDE          400
@@ -11,6 +11,7 @@
 #define PRIMARY_COLORS_N    3
 #define IMAGE_PATH          "files/foto.dat"
 #define NATIVE_MOD          "native"
+#define TAG                 1
 
 
 /* Point info */

@@ -10,16 +10,7 @@
 #include <definitions.h>
 #define NIL (0)
 
-/*Variables Globales */
-
-XColor colorX;
-Colormap mapacolor;
-char cadenaColor[] = "#000000";
-Display *dpy;
-Window w;
-GC gc;
-
-unsigned int parse_mode(char character);
+void print_title();
 void initX();
 void dibujaPunto(int x, int y, int r, int g, int b);
 void calculate_file_lines(int *lines_per_employee, int *rest_lines, long *row_bytes);
@@ -28,41 +19,48 @@ MPI_File open_file(int rank, long row_bytes);
 void parse_image(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm);
 void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm);
 void check_point(int *point_to_paint);
-void receive_points(MPI_Comm parent_comm);
+void receive_points(MPI_Comm parent_comm, MPI_Status *status);
+void print_final_info(double init);
+
+
+/*Variables Globales */
+XColor colorX;
+Colormap mapacolor;
+char cadenaColor[] = "#000000";
+Display *dpy;
+Window w;
+GC gc;
 
 /* Programa principal */
 int main(int argc, char *argv[])
 {
 
-      int rank, size, tag;
+      int rank, size;
       MPI_Comm commPadre;
       MPI_Status status;
-      MPI_File image;
       int error_codes[EMPLOYEES_NUMBER];
-      double finish, init = MPI_Wtime();
+      double init = MPI_Wtime();
 
       MPI_Init(&argc, &argv);
       MPI_Comm_rank(MPI_COMM_WORLD, &rank);
       MPI_Comm_size(MPI_COMM_WORLD, &size);
       MPI_Comm_get_parent(&commPadre);
 
-      if ((commPadre == MPI_COMM_NULL) && (rank == 0))
+      if ((commPadre == MPI_COMM_NULL) && (rank == MASTER_RANK))
       {
             /* Codigo del maestro */
+            print_title();
             initX();
-            printf("[MAESTRO]: Lanzando [%d] TRABAJADORES...\n", EMPLOYEES_NUMBER);
             MPI_Comm_spawn(EXEC_PATH, argv, EMPLOYEES_NUMBER, MPI_INFO_NULL, MASTER_RANK, MPI_COMM_WORLD, &commPadre, error_codes);
 
-            printf("[MAESTRO]: Dibujando imagen...\n");
-            receive_points(commPadre);
-            finish = MPI_Wtime();
-            printf("Tiempo de ejecucion: %f\n", finish - init);
+            printf("[MAESTRO] :: Dibujando imagen...\n");
+            receive_points(commPadre, &status);
+            print_final_info(init);
       }
 
       else
       {
             /* Codigo de todos los trabajadores */
-            /* Variables locales */
             int lines_per_employee, rest_lines, start_line, end_line;
             long row_bytes;
             char mode;
@@ -71,7 +69,6 @@ int main(int argc, char *argv[])
             calculate_file_lines(&lines_per_employee, &rest_lines, &row_bytes);
 
             assign_employee_lines(rank, &start_line, &end_line, lines_per_employee, rest_lines);
-            //printf("TRABAJADOR [%d]: START: %d | END: %d\n", rank, start_line, end_line);
 
             image = open_file(rank, row_bytes);
 
@@ -79,8 +76,10 @@ int main(int argc, char *argv[])
             mode = argv[argc - 1][0];
 
             parse_image(rank, start_line, end_line, mode, image, commPadre);
+
             MPI_File_close(&image);
       }
+
       MPI_Finalize();
 
       return EXIT_SUCCESS;
@@ -147,7 +146,6 @@ MPI_File open_file(int rank, long row_bytes)
 
       return image;
 }
-
 void parse_image(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm)
 {
       unsigned char pixel[PRIMARY_COLORS_N];
@@ -157,7 +155,7 @@ void parse_image(int rank, int start_line, int end_line, char mode, MPI_File ima
       {
             for (j = 0; j < IMAGE_SIDE; j++)
             {
-                  MPI_File_read(image, pixel, PRIMARY_COLORS_N, MPI_UNSIGNED_CHAR, NULL);
+                  MPI_File_read(image, pixel, PRIMARY_COLORS_N, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);
                   put_filter(j, i, pixel, mode, parent_comm);
             }
       }
@@ -192,7 +190,7 @@ void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm p
       }
 
       check_point(point_to_paint);
-      MPI_Send(&point_to_paint, POINT_INFO_N, MPI_INT, MASTER_RANK, 1, parent_comm);
+      MPI_Send(&point_to_paint, POINT_INFO_N, MPI_INT, MASTER_RANK, TAG, parent_comm);
 }
 
 void check_point(int *point_to_paint)
@@ -212,14 +210,30 @@ void check_point(int *point_to_paint)
       }
 }
 
-void receive_points(MPI_Comm parent_comm)
+void receive_points(MPI_Comm parent_comm, MPI_Status *status)
 {
       int point_to_paint[POINT_INFO_N];
       int i;
 
       for (i = 0; i < IMAGE_SIZE; i++)
       {
-            MPI_Recv(&point_to_paint, POINT_INFO_N, MPI_INT, MPI_ANY_SOURCE, 1, parent_comm, NULL);
+            MPI_Recv(&point_to_paint, POINT_INFO_N, MPI_INT, MPI_ANY_SOURCE, TAG, parent_comm, status);
             dibujaPunto(point_to_paint[ROW], point_to_paint[COLUMN], point_to_paint[R], point_to_paint[G], point_to_paint[B]);
       }
+}
+
+void print_title()
+{
+      printf("-------------------------------------------------------------------------\n");
+      printf("\t\t********  RENDERIZADOR GRAFICO  ********\n\n");
+      printf("[MAESTRO] :: Lanzando [%d] TRABAJADORES...\n", EMPLOYEES_NUMBER);
+}
+
+void print_final_info(double init)
+{
+      printf("[MAESTRO] :: El tiempo de renderizado grafico ha sido de: %0.2f segundos.\n", MPI_Wtime() - init);
+      printf("[MAESTRO] :: Mostrando imagen...\n\n");
+      sleep(5);
+      printf("-------------------------------------------------------------------------\n");
+      printf("\t\t********  PROGRAMA FINALIZADO  ********\n\n");
 }
