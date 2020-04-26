@@ -24,6 +24,7 @@ void initX();
 void dibujaPunto(int x, int y, int r, int g, int b);
 void calculate_file_lines(int *lines_per_employee, int *rest_lines, long *row_bytes);
 void assign_employee_lines(int rank, int *start_line, int *end_line, int lines_per_employee, int rest_lines);
+MPI_File open_file(int rank, long row_bytes);
 void parse_image(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm);
 void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm);
 void check_point(int *point_to_paint);
@@ -33,12 +34,12 @@ void receive_points(MPI_Comm parent_comm);
 int main(int argc, char *argv[])
 {
 
-      int rank, size;
+      int rank, size, tag;
       MPI_Comm commPadre;
-      int tag;
       MPI_Status status;
-      int buf[5];
+      MPI_File image;
       int error_codes[EMPLOYEES_NUMBER];
+      double finish, init = MPI_Wtime();
 
       MPI_Init(&argc, &argv);
       MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -54,28 +55,32 @@ int main(int argc, char *argv[])
 
             printf("[MAESTRO]: Dibujando imagen...\n");
             receive_points(commPadre);
+            finish = MPI_Wtime();
+            printf("Tiempo de ejecucion: %f\n", finish - init);
       }
 
       else
       {
-            char mode = argv[argc-1][0];
-
             /* Codigo de todos los trabajadores */
+            /* Variables locales */
             int lines_per_employee, rest_lines, start_line, end_line;
             long row_bytes;
+            char mode;
+            MPI_File image;
 
             calculate_file_lines(&lines_per_employee, &rest_lines, &row_bytes);
 
             assign_employee_lines(rank, &start_line, &end_line, lines_per_employee, rest_lines);
             //printf("TRABAJADOR [%d]: START: %d | END: %d\n", rank, start_line, end_line);
 
-            MPI_File image;
-            MPI_File_open(MPI_COMM_WORLD, IMAGE_PATH, MPI_MODE_RDONLY, MPI_INFO_NULL, &image);
-            MPI_File_set_view(image, rank * row_bytes, MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, NATIVE_MOD, MPI_INFO_NULL);
+            image = open_file(rank, row_bytes);
+
+            /* Coger modo de filtro */
+            mode = argv[argc - 1][0];
 
             parse_image(rank, start_line, end_line, mode, image, commPadre);
+            MPI_File_close(&image);
       }
-
       MPI_Finalize();
 
       return EXIT_SUCCESS;
@@ -134,6 +139,15 @@ void assign_employee_lines(int rank, int *start_line, int *end_line, int lines_p
       rank == (EMPLOYEES_NUMBER - 1) ? (*end_line = (rank + 1) * lines_per_employee + rest_lines) : (*end_line = (rank + 1) * lines_per_employee);
 }
 
+MPI_File open_file(int rank, long row_bytes)
+{
+      MPI_File image;
+      MPI_File_open(MPI_COMM_WORLD, IMAGE_PATH, MPI_MODE_RDONLY, MPI_INFO_NULL, &image);
+      MPI_File_set_view(image, rank * row_bytes, MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, NATIVE_MOD, MPI_INFO_NULL);
+
+      return image;
+}
+
 void parse_image(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm)
 {
       unsigned char pixel[PRIMARY_COLORS_N];
@@ -147,17 +161,15 @@ void parse_image(int rank, int start_line, int end_line, char mode, MPI_File ima
                   put_filter(j, i, pixel, mode, parent_comm);
             }
       }
-
-      MPI_File_close(&image);
 }
 
 void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm)
 {
       int point_to_paint[POINT_INFO_N];
+
       point_to_paint[ROW] = row;
       point_to_paint[COLUMN] = column;
 
-      printf("%c\n", mode);
       switch (mode)
       {
       case SEPIA:
