@@ -182,10 +182,16 @@ void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm p
             point_to_paint[B] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
             break;
 
+      case NEGATIVE:
+            point_to_paint[R] = 255 - (int)pixel[R];
+            point_to_paint[G] = 255 - (int)pixel[G];
+            point_to_paint[B] = 255 - (int)pixel[B];
+            break;
+
       default:
-            point_to_paint[R] = pixel[R];
-            point_to_paint[G] = pixel[G];
-            point_to_paint[B] = pixel[B];
+            point_to_paint[R] = (int)pixel[R];
+            point_to_paint[G] = (int)pixel[G];
+            point_to_paint[B] = (int)pixel[B];
             break;
       }
 

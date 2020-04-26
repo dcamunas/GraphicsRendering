@@ -266,20 +266,12 @@ tripleta de tres parámetros de tipo “\textit{unsigned char}” correspondiend
 
 
 \section{Planteamiento de la solución}
-Para solucionar el problema, se tiene en cuenta que una \textit{red Toroidal} tiene un valor de \textit{\textbf{lado L}}.
-Donde el \textit{número de procesos} \textbf{N} esta determinado por: \textbf{$L^{2}$}
+El programa comienza con a creación de un solo proceso, este proceso es el proceso principal, el cual corresponde al proceso cuyo \textit{RANK} es igual a 0. También conocido a lo largo del programa como el proceso \textbf{\textit{maestro}}.\\
+Una vez lanzado el proceso \textit{maestro}, este creará una ventana gráfica haciendo uso de la librería \textit{\textbf{lX11}} (función \textit{initX()}). Además también creará \textbf{N} procesos hijos, conocidos a lo largo del programa como \textit{\textbf{esclavos o trabajadores}} (definidos con la constante creada eb tiempo de compilación \textit{EMPLOYEES-NUMBER}).\\
 
-En este caso el valor de \textbf{L} es \textbf{3}, por lo tanto, el valor de \textbf{N} será \textbf{9}, esto quiere decir que este toroide estaŕa formado por 9 procesos (denominados en el código como \textit{ranks}).
+Tras lanzar el \textit{\textbf{maestro}} los N trabajadores, este se maltendra a la espera en todo momento, para recibir los pixeles de cada trabajador, los cuales debe de dibujar en la imagen.\\
+Mientras el maestro se mantiene en dicha espera, a cada \textit{\textbf{trabajador}}, se le asignara una zona de trabaja, esta zona pertenece a un rango de lineas del fichero, el cual será obtenido de dividir el número de filas del fichero entre los trabajadores generados (el resto de la operación, si es que lo hubiese, será asignado al último trabajador, es decir al \textit{RANK} N-1).
 
-El número de lado \textbf{L} del toroide se encuentra definido en \textit{/include/definitions}, como:
-
-\textit{\textbf{define L 3}}
-
-Si se quiere realizar la simulación con un valor de lado distinto, se deberá cambiar el valor de esta constante. Además del número total de procesos a crear, pasado como argumento al comando de ejecución (\textit{mpirun}) en la línea de ordenes. Este valor se puede encontrar en el \textit{Makefile} del proyecto.
-
-Otra constante importante, es la que determina el tamaño del buffer lectura del fichero (en este caso \textit{datos.dat}), debido a que si se quiere leer una gran cantidad de números, y asi crear una gran cantidad de nodos (ranks), se debe de modificar su valor a uno mayor.
-
-\textit{\textbf{define MAX-SIZE 1024}}
 
 \subsection{Tipos de nodos}
 En este problema encontramos dos tipos de nodos: el \textbf{\textit{rank o nodo 0}} y los demás \textbf{\textit{nodos}}.

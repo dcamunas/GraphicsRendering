@@ -25,6 +25,7 @@
 /* Colors info*/
 #define SEPIA              'S'
 #define BLACK_WHITE        'B'
+#define NEGATIVE           'N'
 #define DEFAULT            'D'
 
 /* Functions */

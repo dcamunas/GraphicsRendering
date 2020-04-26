@@ -28,5 +28,8 @@ solution_sepia:
 solution_blackwhite:
 	$(RUN) -np 1 ./$(DIREXE)pract2 BlackWhite
 
+solution_negative:
+	$(RUN) -np 1 ./$(DIREXE)pract2 Negative
+
 clean : 
 	rm -rf *~ core $(DIROBJ) $(DIREXE) $(DIRHEA)*~ $(DIRSRC)*~ 
