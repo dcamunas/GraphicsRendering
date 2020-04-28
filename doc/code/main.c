@@ -1,47 +1,52 @@
 int main(int argc, char *argv[])
 {
 
-    /*Variables*/
-    int rank, size, numbers_n, finish;
-    long double number, min_number;
-    long double *data = malloc(DATA_SIZE);
-    int *neighbors = malloc(NEIGHBORS_SIZE);
-    MPI_Status status;
+      int rank, size;
+      MPI_Comm commPadre;
+      MPI_Status status;
+      int error_codes[EMPLOYEES_NUMBER];
+      double init = MPI_Wtime();
 
-    /* Initialize MPI program */
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+      MPI_Init(&argc, &argv);
+      MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+      MPI_Comm_size(MPI_COMM_WORLD, &size);
+      MPI_Comm_get_parent(&commPadre);
 
-    if (rank == FIRST_RANK)
-    {
-        /*Get quantity of numbers*/
-        numbers_n = load_data(data);
+      if ((commPadre == MPI_COMM_NULL) && (rank == MASTER_RANK))
+      {
+            /* Codigo del maestro */
+            print_title();
+            initX();
+            MPI_Comm_spawn(EXEC_PATH, argv, EMPLOYEES_NUMBER, MPI_INFO_NULL, MASTER_RANK, MPI_COMM_WORLD, &commPadre, error_codes);
 
-        finish = check_size(size, numbers_n);
+            printf("[MAESTRO] :: Dibujando imagen...\n");
+            receive_points(commPadre, &status);
+            print_final_info(init);
+      }
 
-        if (finish != TRUE)
-        {
-            add_numbers(data, size);
-        }
-    }
+      else
+      {
+            /* Codigo de todos los trabajadores */
+            int lines_per_employee, rest_lines, start_line, end_line;
+            long row_bytes;
+            char mode;
+            MPI_File image;
 
-    MPI_Bcast(&finish, 1, MPI_INT, 0, MPI_COMM_WORLD);
+            calculate_file_lines(&lines_per_employee, &rest_lines, &row_bytes);
 
-    if (finish != TRUE)
-    {
-        MPI_Recv(&number, 1, MPI_LONG_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, NULL);
-        printf("[X] RANK[%d] --> %.2Lf\n", rank, number);
+            assign_employee_lines(rank, &start_line, &end_line, lines_per_employee, rest_lines);
 
-        get_neighbors(rank, neighbors);
+            image = open_file(rank, row_bytes);
 
-        min_number = calculate_min(rank, number, neighbors);
+            /* Coger modo de filtro */
+            mode = argv[argc - 1][0];
 
-        print_min_number(rank, min_number);
-    }
+            parse_image(rank, start_line, end_line, mode, image, commPadre);
 
-    /* Finalize MPI program */
-    MPI_Finalize();
+            MPI_File_close(&image);
+      }
 
-    return EXIT_SUCCESS;
+      MPI_Finalize();
+
+      return EXIT_SUCCESS;
 }

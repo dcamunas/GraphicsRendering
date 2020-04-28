@@ -14,10 +14,10 @@ void print_title();
 void initX();
 void dibujaPunto(int x, int y, int r, int g, int b);
 void calculate_file_lines(int *lines_per_employee, int *rest_lines, long *row_bytes);
-void assign_employee_lines(int rank, int *start_line, int *end_line, int lines_per_employee, int rest_lines);
+void assign_work_zone(int rank, int *start_line, int *end_line, int lines_per_employee, int rest_lines);
 MPI_File open_file(int rank, long row_bytes);
-void parse_image(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm);
-void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm);
+void read_pixel(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm);
+void apply_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm);
 void check_point(int *point_to_paint);
 void receive_points(MPI_Comm parent_comm, MPI_Status *status);
 void print_final_info(double init);
@@ -68,14 +68,14 @@ int main(int argc, char *argv[])
 
             calculate_file_lines(&lines_per_employee, &rest_lines, &row_bytes);
 
-            assign_employee_lines(rank, &start_line, &end_line, lines_per_employee, rest_lines);
+            assign_work_zone(rank, &start_line, &end_line, lines_per_employee, rest_lines);
 
             image = open_file(rank, row_bytes);
 
             /* Coger modo de filtro */
             mode = argv[argc - 1][0];
 
-            parse_image(rank, start_line, end_line, mode, image, commPadre);
+            read_pixel(rank, start_line, end_line, mode, image, commPadre);
 
             MPI_File_close(&image);
       }
@@ -123,21 +123,23 @@ void dibujaPunto(int x, int y, int r, int g, int b)
       XFlush(dpy);
 }
 
+/* Calcular líneas por trabajador */
 void calculate_file_lines(int *lines_per_employee, int *rest_lines, long *row_bytes)
 {
-      /* Calcular lineas por empleado */
       *lines_per_employee = IMAGE_SIDE / EMPLOYEES_NUMBER;
       *rest_lines = IMAGE_SIDE % EMPLOYEES_NUMBER;
       *row_bytes = *lines_per_employee * IMAGE_SIDE * sizeof(unsigned char) * 3;
 }
 
-void assign_employee_lines(int rank, int *start_line, int *end_line, int lines_per_employee, int rest_lines)
+/* Asignar zona de trabajo de cada trabajador */
+void assign_work_zone(int rank, int *start_line, int *end_line, int lines_per_employee, int rest_lines)
 {
       *start_line = rank * lines_per_employee;
 
       rank == (EMPLOYEES_NUMBER - 1) ? (*end_line = (rank + 1) * lines_per_employee + rest_lines) : (*end_line = (rank + 1) * lines_per_employee);
 }
 
+/* Apertura del archivo, devolvera el descriptor del mismo */
 MPI_File open_file(int rank, long row_bytes)
 {
       MPI_File image;
@@ -146,7 +148,10 @@ MPI_File open_file(int rank, long row_bytes)
 
       return image;
 }
-void parse_image(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm)
+
+
+/* Lectura del pixel de la imagen */
+void read_pixel(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm)
 {
       unsigned char pixel[PRIMARY_COLORS_N];
       int i, j;
@@ -156,12 +161,13 @@ void parse_image(int rank, int start_line, int end_line, char mode, MPI_File ima
             for (j = 0; j < IMAGE_SIDE; j++)
             {
                   MPI_File_read(image, pixel, PRIMARY_COLORS_N, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);
-                  put_filter(j, i, pixel, mode, parent_comm);
+                  apply_filter(j, i, pixel, mode, parent_comm);
             }
       }
 }
 
-void put_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm)
+/* Aplicar filtro al pixel */
+void apply_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm)
 {
       int point_to_paint[POINT_INFO_N];
 

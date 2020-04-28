@@ -28,57 +28,30 @@
 \newlabel{fig:intro}{{1}{3}{Representación de píxeles que forman una imagen}{figure.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Planteamiento de la soluci\IeC {\'o}n}{4}{section.3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Tipos de nodos}{4}{subsection.3.1}}
-\citation{mpi_rank}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Algoritmos principales}{5}{subsection.3.2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Obtenci\IeC {\'o}n de los vecinos}{5}{subsubsection.3.2.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Representaci\IeC {\'o}n red toroidal como una matriz.}}{5}{figure.2}}
-\newlabel{fig:matriz}{{2}{5}{Representación red toroidal como una matriz}{figure.2}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces F\IeC {\'o}rmulas para obtenci\IeC {\'o}n vecinos \textit  {Norte} y \textit  {Sur}.}}{6}{table.1}}
-\newlabel{tab:filas}{{1}{6}{Fórmulas para obtención vecinos \textit {Norte} y \textit {Sur}}{table.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces F\IeC {\'o}rmulas para obtenci\IeC {\'o}n vecinos \textit  {Oeste} y \textit  {Este}.}}{7}{table.2}}
-\newlabel{tab:columnas}{{2}{7}{Fórmulas para obtención vecinos \textit {Oeste} y \textit {Este}}{table.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}C\IeC {\'a}lculo del n\IeC {\'u}mero m\IeC {\'\i }nimo}{7}{subsubsection.3.2.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Reprersentaci\IeC {\'o}n obtrenci\IeC {\'o}n del valor m\IeC {\'\i }nimo red toroidal}}{7}{figure.3}}
-\newlabel{fig:toroide}{{3}{7}{Reprersentación obtrención del valor mínimo red toroidal}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Representaci\IeC {\'o}n del flujo de eventos}{5}{subsection.3.2}}
 \citation{mpi_init}
 \citation{mpi_size}
 \citation{mpi_rank}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Dise\IeC {\~n}o de la soluci\IeC {\'o}n}{8}{section.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Funci\IeC {\'o}n principal del programa (\textit  {main})}{8}{subsection.4.1}}
-\@writefile{lol}{\contentsline {lstlisting}{code/main.c}{8}{lstlisting.-1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Lectura del fichero (\textit  {load-data})}{9}{subsection.4.2}}
-\@writefile{lol}{\contentsline {lstlisting}{code/open\textunderscore file.c}{9}{lstlisting.-2}}
-\citation{mpi_size}
-\citation{mpi_bcast}
-\@writefile{lol}{\contentsline {lstlisting}{code/load\textunderscore data.c}{10}{lstlisting.-3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Comprobaci\IeC {\'o}n de la cantidad de n\IeC {\'u}meros (\textit  {check-size})}{10}{subsection.4.3}}
-\@writefile{lol}{\contentsline {lstlisting}{code/bdcast.c}{10}{lstlisting.-4}}
 \citation{mpi_rank}
-\citation{mpi_send}
-\citation{mpi_recv}
-\@writefile{lol}{\contentsline {lstlisting}{code/check\textunderscore size.c}{11}{lstlisting.-5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Envio de su n\IeC {\'u}mero a cada nodo (\textit  {send-numbers})}{11}{subsection.4.4}}
-\@writefile{lol}{\contentsline {lstlisting}{code/add\textunderscore numbers.c}{11}{lstlisting.-6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Obtenci\IeC {\'o}n de los vecinos (\textit  {get-neighbors})}{12}{subsection.4.5}}
-\@writefile{lol}{\contentsline {lstlisting}{code/get\textunderscore neighbors.c}{12}{lstlisting.-7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}C\IeC {\'a}lculo del n\IeC {\'u}mero m\IeC {\'\i }nimo (\textit  {calculate-min})}{13}{subsection.4.6}}
-\@writefile{lol}{\contentsline {lstlisting}{code/calculate\textendash v1.c}{14}{lstlisting.-8}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Mejora del algoritmo}{15}{subsubsection.4.6.1}}
-\@writefile{lol}{\contentsline {lstlisting}{code/calculate\textunderscore min.c}{15}{lstlisting.-9}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Representaci\IeC {\'o}n del flujo de eventos de envio y recepci\IeC {\'o}n}{16}{subsubsection.4.6.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Representaci\IeC {\'o}n red toroidal al inicio (izquerda) y al final (derecha)}}{16}{figure.4}}
-\newlabel{fig:toroide}{{4}{16}{Representación red toroidal al inicio (izquerda) y al final (derecha)}{figure.4}{}}
-\newlabel{fig:matriz-1}{{1}{16}{Representación del flujo de eventos de envio y recepción}{Item.17}{}}
-\newlabel{fig:matriz-2}{{2}{17}{Representación del flujo de eventos de envio y recepción}{Item.18}{}}
-\newlabel{fig:matriz-3}{{3}{17}{Representación del flujo de eventos de envio y recepción}{Item.19}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Dise\IeC {\~n}o de la soluci\IeC {\'o}n}{6}{section.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Funci\IeC {\'o}n principal del programa (\textit  {main})}{6}{subsection.4.1}}
+\@writefile{lol}{\contentsline {lstlisting}{code/main.c}{6}{lstlisting.-1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Recepci\IeC {\'o}n de los p\IeC {\'\i }xeles (\textit  {receive-points})}{8}{subsection.4.2}}
+\@writefile{lol}{\contentsline {lstlisting}{code/receive\textunderscore points.c}{8}{lstlisting.-2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Calcular l\IeC {\'\i }neas del fichero (\textit  {calculate-file-lines})}{8}{subsection.4.3}}
+\@writefile{lol}{\contentsline {lstlisting}{code/calculate\textunderscore file\textunderscore lines.c}{8}{lstlisting.-3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Asignar zona de trabajo (\textit  {assign-work-zone})}{9}{subsection.4.4}}
+\@writefile{lol}{\contentsline {lstlisting}{code/assign\textunderscore work\textunderscore zone.c}{9}{lstlisting.-4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Apertura del fichero (\textit  {open-file})}{9}{subsection.4.5}}
+\@writefile{lol}{\contentsline {lstlisting}{code/open\textunderscore file.c}{9}{lstlisting.-5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Leer un p\IeC {\'\i }xel de la imagen (\textit  {read-pixel})}{10}{subsection.4.6}}
+\@writefile{lol}{\contentsline {lstlisting}{code/read\textunderscore pixel.c}{10}{lstlisting.-6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Aplicar filtro (\textit  {apply-filter})}{10}{subsection.4.7}}
+\@writefile{lol}{\contentsline {lstlisting}{code/apply\textunderscore filter.c}{11}{lstlisting.-7}}
 \bibdata{biblist}
-\bibcite{transpas}{{1}{}{{}}{{}}}
-\bibcite{mpi_bcast}{{2}{}{{}}{{}}}
-\bibcite{mpi_rank}{{3}{}{{}}{{}}}
-\bibcite{mpi_size}{{4}{}{{}}{{}}}
-\bibcite{mpi_init}{{5}{}{{}}{{}}}
-\bibcite{mpi_recv}{{6}{}{{}}{{}}}
-\bibcite{mpi_send}{{7}{}{{}}{{}}}
+\bibcite{mpi_rank}{{1}{}{{}}{{}}}
+\bibcite{mpi_size}{{2}{}{{}}{{}}}
+\bibcite{mpi_init}{{3}{}{{}}{{}}}
 \bibstyle{plain}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{toc}{\contentsline {section}{Referencias}{18}{section*.2}}
+\@writefile{toc}{\contentsline {section}{Referencias}{13}{section*.2}}
