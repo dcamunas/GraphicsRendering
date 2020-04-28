@@ -18,8 +18,8 @@ void assign_work_zone(int rank, int *start_line, int *end_line, int lines_per_em
 MPI_File open_file(int rank, long row_bytes);
 void read_pixel(int rank, int start_line, int end_line, char mode, MPI_File image, MPI_Comm parent_comm);
 void apply_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm);
-void check_point(int *point_to_paint);
-void receive_points(MPI_Comm parent_comm, MPI_Status *status);
+void check_pixel(int *pixel_to_paint);
+void receive_pixels(MPI_Comm parent_comm, MPI_Status *status);
 void print_final_info(double init);
 
 
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
             MPI_Comm_spawn(EXEC_PATH, argv, EMPLOYEES_NUMBER, MPI_INFO_NULL, MASTER_RANK, MPI_COMM_WORLD, &commPadre, error_codes);
 
             printf("[MAESTRO] :: Dibujando imagen...\n");
-            receive_points(commPadre, &status);
+            receive_pixels(commPadre, &status);
             print_final_info(init);
       }
 
@@ -123,6 +123,19 @@ void dibujaPunto(int x, int y, int r, int g, int b)
       XFlush(dpy);
 }
 
+/* Recibir pixel a pintar */
+void receive_pixels(MPI_Comm parent_comm, MPI_Status *status)
+{
+      int pixel_to_paint[PIXEL_INFO_N];
+      int i;
+
+      for (i = 0; i < IMAGE_SIZE; i++)
+      {
+            MPI_Recv(&pixel_to_paint, PIXEL_INFO_N, MPI_INT, MPI_ANY_SOURCE, TAG, parent_comm, status);
+            dibujaPunto(pixel_to_paint[ROW], pixel_to_paint[COLUMN], pixel_to_paint[R], pixel_to_paint[G], pixel_to_paint[B]);
+      }
+}
+
 /* Calcular líneas por trabajador */
 void calculate_file_lines(int *lines_per_employee, int *rest_lines, long *row_bytes)
 {
@@ -169,71 +182,61 @@ void read_pixel(int rank, int start_line, int end_line, char mode, MPI_File imag
 /* Aplicar filtro al pixel */
 void apply_filter(int row, int column, unsigned char *pixel, char mode, MPI_Comm parent_comm)
 {
-      int point_to_paint[POINT_INFO_N];
+      int pixel_to_paint[PIXEL_INFO_N];
 
-      point_to_paint[ROW] = row;
-      point_to_paint[COLUMN] = column;
+      pixel_to_paint[ROW] = row;
+      pixel_to_paint[COLUMN] = column;
 
       switch (mode)
       {
       case SEPIA:
-            point_to_paint[R] = (int)(pixel[R] * 0.393) + (int)(pixel[G] * 0.769) + (int)(pixel[B] * 0.189);
-            point_to_paint[G] = (int)(pixel[R] * 0.349) + (int)(pixel[G] * 0.686) + (int)(pixel[B] * 0.168);
-            point_to_paint[B] = (int)(pixel[R] * 0.272) + (int)(pixel[G] * 0.534) + (int)(pixel[B] * 0.131);
+            pixel_to_paint[R] = (int)(pixel[R] * 0.393) + (int)(pixel[G] * 0.769) + (int)(pixel[B] * 0.189);
+            pixel_to_paint[G] = (int)(pixel[R] * 0.349) + (int)(pixel[G] * 0.686) + (int)(pixel[B] * 0.168);
+            pixel_to_paint[B] = (int)(pixel[R] * 0.272) + (int)(pixel[G] * 0.534) + (int)(pixel[B] * 0.131);
             break;
 
       case BLACK_WHITE:
-            point_to_paint[R] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
-            point_to_paint[G] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
-            point_to_paint[B] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
+            pixel_to_paint[R] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
+            pixel_to_paint[G] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
+            pixel_to_paint[B] = (int)(pixel[R] * 0.2986) + (int)(pixel[G] * 0.587) + (int)(pixel[B] * 0.114);
             break;
 
       case NEGATIVE:
-            point_to_paint[R] = 255 - (int)pixel[R];
-            point_to_paint[G] = 255 - (int)pixel[G];
-            point_to_paint[B] = 255 - (int)pixel[B];
+            pixel_to_paint[R] = 255 - (int)pixel[R];
+            pixel_to_paint[G] = 255 - (int)pixel[G];
+            pixel_to_paint[B] = 255 - (int)pixel[B];
             break;
 
       default:
-            point_to_paint[R] = (int)pixel[R];
-            point_to_paint[G] = (int)pixel[G];
-            point_to_paint[B] = (int)pixel[B];
+            pixel_to_paint[R] = (int)pixel[R];
+            pixel_to_paint[G] = (int)pixel[G];
+            pixel_to_paint[B] = (int)pixel[B];
             break;
       }
 
-      check_point(point_to_paint);
-      MPI_Send(&point_to_paint, POINT_INFO_N, MPI_INT, MASTER_RANK, TAG, parent_comm);
+      check_pixel(pixel_to_paint);
+      MPI_Send(&pixel_to_paint, PIXEL_INFO_N, MPI_INT, MASTER_RANK, TAG, parent_comm);
 }
 
-void check_point(int *point_to_paint)
+/* Comprobar pixel a enviar */
+void check_pixel(int *pixel_to_paint)
 {
       int i;
 
       for (i = R; i <= B; i++)
       {
-            if (point_to_paint[i] < 0)
+            if (pixel_to_paint[i] < 0)
             {
-                  point_to_paint[i] = 0;
+                  pixel_to_paint[i] = 0;
             }
-            if (point_to_paint[i] > 255)
+            if (pixel_to_paint[i] > 255)
             {
-                  point_to_paint[i] = 255;
+                  pixel_to_paint[i] = 255;
             }
       }
 }
 
-void receive_points(MPI_Comm parent_comm, MPI_Status *status)
-{
-      int point_to_paint[POINT_INFO_N];
-      int i;
-
-      for (i = 0; i < IMAGE_SIZE; i++)
-      {
-            MPI_Recv(&point_to_paint, POINT_INFO_N, MPI_INT, MPI_ANY_SOURCE, TAG, parent_comm, status);
-            dibujaPunto(point_to_paint[ROW], point_to_paint[COLUMN], point_to_paint[R], point_to_paint[G], point_to_paint[B]);
-      }
-}
-
+/* Imprimir titulor */ 
 void print_title()
 {
       printf("-------------------------------------------------------------------------\n");
@@ -241,6 +244,7 @@ void print_title()
       printf("[MAESTRO] :: Lanzando [%d] TRABAJADORES...\n", EMPLOYEES_NUMBER);
 }
 
+/* Imprimir informacion final */
 void print_final_info(double init)
 {
       printf("[MAESTRO] :: El tiempo de renderizado grafico ha sido de: %0.2f segundos.\n", MPI_Wtime() - init);

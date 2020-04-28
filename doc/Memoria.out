@@ -10,5 +10,6 @@
 \BOOKMARK [2][-]{subsection.4.4}{Asignar zona de trabajo \(assign-work-zone\)}{section.4}% 10
 \BOOKMARK [2][-]{subsection.4.5}{Apertura del fichero \(open-file\)}{section.4}% 11
 \BOOKMARK [2][-]{subsection.4.6}{Leer un p\355xel de la imagen \(read-pixel\)}{section.4}% 12
-\BOOKMARK [2][-]{subsection.4.7}{Aplicar filtro \(apply-filter\)}{section.4}% 13
-\BOOKMARK [1][-]{section*.2}{Referencias}{}% 14
+\BOOKMARK [2][-]{subsection.4.7}{Comprobaci\363n del p\355xel \(check-pixel\)}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.8}{Aplicar filtro \(apply-filter\)}{section.4}% 14
+\BOOKMARK [1][-]{section*.2}{Referencias}{}% 15

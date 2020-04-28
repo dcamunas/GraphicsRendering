@@ -114,7 +114,7 @@
 \title{Práctica 2: Renderizado Gráfico}							% Titulo
 \author{David Camuñas Sánchez}							% Autor
 
-\date{18 de marzo de 2020}											% Fecha
+\date{29 de abril de 2020}											% Fecha
 \newcommand{\subject}{Diseño de Infraestructuras de Red}						% Asignatura
 \newcommand{\course}{Grado en Ingeniería Informática}	% Curso
 %\newcommand{\course}{Máster Universitario en Ingeniería Informática}	% Curso
@@ -287,6 +287,18 @@ En este problema encontramos dos tipos de nodos: el \textbf{\textit{rank o nodo 
 Todo este proceso se describirá mas detalladamente en el siguiente apartado: \textbf{\textit{Diseño de la solución}}.
 
 \subsection{Representación del flujo de eventos}
+Como se puede observar en la Figura \ref{fig:flujo}, el proceso \textbf{\textit{maestro}} (principal), comenzará creando N procesos trabajadores (indicado en \textbf{Rojo}). Tras su creación, el maestro se mantendrá a la espera mientras los trabajadores realizan sus tareas en su zona de la imagen (procesamiento de los píxeles que les ha tocado).\\
+
+Cuando un \textbf{\textit{trabajador}} termina de procesar un pixel, junto todas sus comprobacines, y este esta listo para ser pintado, se lo envia al maestro (indicado en \textbf{Verde}). Como se puede observar el mensaje estará formado por la información del pixel a dibujar, la cual esta formada por los valores de los \textbf{tres colores primarios}, más su \textbf{posición} en la imagen.\\
+Una vez enviado, será recibido por el \textbf{\textit{maestro}} y pintará el pixel en su posición.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=120mm]{flujo.PNG}
+\caption{Representación del flujo de eventos.}
+\label{fig:flujo}
+\end{figure}
+
 
 
 
@@ -302,51 +314,50 @@ Como se puede observar en esta función principal (\textit{main}), encontramos d
 
 Tras esto se declarán las primitivas de \textit{\textbf{MPI}} como: 
 \begin{itemize}
-	\item \textit{MPI-Init}() \cite{mpi_init}: Para inicializar la estructura de comunicación de MPI entre los procesos. 
-	\item \textit{MPI-Comm-Size}() \cite{mpi_size}: Para obtener el tamaño de la comunicacion (número de proceso a ejecutar en este caso, ranks), etc.
-	\item \textit{MPI-Comm-rank}() \cite{mpi_rank}: Para establecer el identificador de cada proceso \textit{rank}.
-	\item \textit{MPI-Comm-get-parent}() \cite{mpi_rank}: Se encarga de retornar el comunicador del proceso padre al proceso actual.
+	\item \textit{MPI-Init}() \cite{transpas}: Para inicializar la estructura de comunicación de MPI entre los procesos. 
+	\item \textit{MPI-Comm-Size}() \cite{transpas}: Para obtener el tamaño de la comunicacion (número de proceso a ejecutar en este caso, ranks), etc.
+	\item \textit{MPI-Comm-rank}() \cite{transpas}: Para establecer el identificador de cada proceso \textit{rank}.
+	\item \textit{MPI-Comm-get-parent}() \cite{org}: Se encarga de retornar el comunicador del proceso padre al proceso actual.
 \end{itemize}
 
 También en esta función se llevan a cabo las llamadas a las demás tipos de funciones que componen el programa
-
 \lstinputlisting[language=C]{code/main.c}
 
 
 \subsection{Recepción de los píxeles (\textit{receive-points})}
-El encargado de ejecutar esta función (como bien hemos dicho anteriormente) es el proceso \textbf{maestro} (Rank 0). La cual, se encarga de invocar a la primitiva de MPI, \textbf{\textit{MPI-Recv}}(), para la recepción por medio de un buffer de tipo entero (point-to-paint), en el cual se almacenará los datos del mensaje enviado por un trabajador, este contiene la información necesaria para pintar ese píxel en la imagen, tras esto se pinta dicho píxel por pantalla con la función \textit{\textbf{dibujarPunto()}}.
-
+El encargado de ejecutar esta función (como bien hemos dicho anteriormente) es el proceso \textbf{maestro} (Rank 0). La cual, se encarga de invocar a la primitiva de MPI \cite{org}, \textbf{\textit{MPI-Recv}}() \cite{org}, para la recepción por medio de un buffer de tipo entero (point-to-paint), en el cual se almacenará los datos del mensaje enviado por un trabajador, este contiene la información necesaria para pintar ese píxel en la imagen, tras esto se pinta dicho píxel por pantalla con la función \textit{\textbf{dibujarPunto()}}.
 \lstinputlisting[language=C]{code/receive_points.c}
 
 
 \subsection{Calcular líneas del fichero (\textit{calculate-file-lines})}
 Esta función llevada a cabo por todo proceso de tipo trabajador (distinto de Rank 0), se encarga de calcular la zona de trabajo que le corresponde a cada trabajador (líneas que le corresponden). Se realiza como se puede observar por la division entre \textit{IMAGE-SIDE} (lado de la imagen), que es el número de filas o líneas que tiene la imagen (400 en este caso), entre el \textit{EMPLOYEES-NUMBER} (constante que representa el número de trabajadores). También calculamos el resto de la operación anterior, y el número de bytes de cada fila (\textit{row-bytes}), esta variable almacenara el número de bytes o elementos por fila.
-	
 \lstinputlisting[language=C]{code/calculate_file_lines.c}
 
 
 \subsection{Asignar zona de trabajo (\textit{assign-work-zone})}
 El encargado de ejecutar esta función al igual que la anterior, y las posteriores es todo proceso de tipo trabajador (distinto a Rank 0). Esta función de asignar su zona de trabajo a cada proceso trabajador. Es decir, de asignarle una linea de inicio y otra de fin. Para ello cada \textbf{línea de comienzo} (\textit{start-line}) de cada trabajador será: su \textit{rank} x \textit{lines-per-employee} (cantidad de líneas asignada a cada trabajador). Tras esto se calculará la linea de fin (\textit{end-line}), que se obtendrá de calcular la misma operación anterior pero incrementando el rank en 1. En cambio, si el rank actual es el último, en este caso se le asignará también \textit{rest-lines} (resto de las líneas si es que las hubiese).
-
 \lstinputlisting[language=C]{code/assign_work_zone.c}
 
 
 \subsection{Apertura del fichero (\textit{open-file})}
-En esta función llevada a cabo por cada trabajador, se realiza la apertura del fichero de la imagen. Para ello como se puede observar se utiliza la función \textit{\textbf{MPI-File-open()}}, y posteriormente se utiliza la función \textbf{\textit{MPI-File-set-view()}} la cual posiciona a cada rank en su zona de trabajo, y evitar así que interfieran entre ellos.\\
+En esta función llevada a cabo por cada trabajador, se realiza la apertura del fichero de la imagen. Para ello como se puede observar se utiliza la función \textit{\textbf{MPI-File-open()}} \cite{org}, y posteriormente se utiliza la función \textbf{\textit{MPI-File-set-view()}} \cite{org} la cual posiciona a cada rank en su zona de trabajo, y evitar así que interfieran entre ellos.\\
 Finalmente devolvemos el descriptor del archivo, ya que sera necesario más adelante. 
-
 \lstinputlisting[language=C]{code/open_file.c}
 
 
 \subsection{Leer un píxel de la imagen (\textit{read-pixel})}
-En esta función llevada a cabo por cada trabajador, donde leerá y almacena la información de cada píxel de la imagen (que pertenezca a su zona de trabajo), mediante la función \textit{\textbf{MPI-File-read()}}. Esta información se almacenara en un vector de tipo \textit{unsigned char} denominado \textit{\textbf{píxel}}. Donde se almacenarán los valores de ese pixel correspondientes a cada color primario, es decir, \textbf{R, G, B} (Rojo, Verde y Azul).
+En esta función llevada a cabo por cada trabajador, donde leerá y almacena la información de cada píxel de la imagen (que pertenezca a su zona de trabajo), mediante la función \textit{\textbf{MPI-File-read()}} \cite{org}. Esta información se almacenara en un vector de tipo \textit{unsigned char} denominado \textit{\textbf{píxel}}. Donde se almacenarán los valores de ese pixel correspondientes a cada color primario, es decir, \textbf{R, G, B} (Rojo, Verde y Azul).
 Tras esto, se llamará ma la función aplicar filtro (\textbf{\textit{apply-filter}}()).
-
 \lstinputlisting[language=C]{code/read_pixel.c}
 
 
+\subsection{Comprobación del píxel (\textit{check-pixel})}
+En esta función llevada a cabo por cada trabajador, se comprobará si el valor de los colores primarios que forman el píxel, se encuentra dentro de su rango, ya que el color se calcula entre el rango de 0 a 255.
+\lstinputlisting[language=C]{code/check_pixel.c} 
+
+
 \subsection{Aplicar filtro (\textit{apply-filter})}
-En esta función llevada a cabo por cada trabajador. Una vez que tiene la información del pixel leido (almacenada en \textbf{\textit{pixel}}), se asignará dicha información, junto con la posición en la que se encentra el pixel en la imagen (Fila, Columna), al vector de tipo entero \textit{\textbf{point-to-paint}}. Este será utilizado para almacenar la información del píxel durante su configuración, es decir, para aplicarle el filtro que haya deseado el usuario.
+En esta función llevada a cabo por cada trabajador, una vez que tiene la información del pixel leido (almacenada en \textbf{\textit{pixel}}), se asignará dicha información, junto con la posición en la que se encentra el pixel en la imagen (Fila, Columna), al vector de tipo entero \textit{\textbf{point-to-paint}}. Este será utilizado para almacenar la información del píxel durante su configuración, es decir, para aplicarle el filtro que haya deseado el usuario.
 
 Los filtros de los cuales dispone el programa, como se puede observar, son:
 \begin{itemize}
@@ -357,8 +368,7 @@ Los filtros de los cuales dispone el programa, como se puede observar, son:
 \end{itemize}
 
 Una vez, que se ha aplicado el filtro, se debera de comprobar si el filtro ha sido aplicado de forma correcta, mediante la función \textit{\textbf{check-pixel}}.\\
-Finalmente, se mandará la información correspondiente al pixel (almacenda en \textit{\textbf{point-to-paint}})al proceso maestro, mediante la función \textbf{\textit{MPI-Send()}}, para que así el maestro pueda pintar el píxel por pantalla.
-
+Finalmente, se mandará la información correspondiente al pixel (almacenda en \textit{\textbf{point-to-paint}})al proceso maestro, mediante la función \textbf{\textit{MPI-Send()}} \cite{org}, para que así el maestro pueda pintar el píxel por pantalla.
 \lstinputlisting[language=C]{code/apply_filter.c}
 
 

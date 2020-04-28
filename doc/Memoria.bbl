@@ -1,15 +1,11 @@
 \begin{thebibliography}{1}
 
-\bibitem{mpi_rank}
-\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Comm_rank}.
-\newblock Determinar \textit{rank} mpi.
+\bibitem{transpas}
+\textit{Funciones de MPI - Diseño de Infraestructuras de Redes}.
+\newblock Javier ayllón.
 
-\bibitem{mpi_size}
-\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Comm_size}.
-\newblock Determinar tamaño del comunicador mpi.
-
-\bibitem{mpi_init}
-\url{https://lsi.ugr.es/jmantas/ppr/ayuda/mpi_ayuda.php?ayuda=MPI_Init}.
-\newblock Inicialización mpi.
+\bibitem{org}
+\textit{Open MPI Organization}.
+\newblock \url{https://www.open-mpi.org}.
 
 \end{thebibliography}

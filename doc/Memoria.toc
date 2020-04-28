@@ -11,5 +11,6 @@
 \contentsline {subsection}{\numberline {4.4}Asignar zona de trabajo (\textit {assign-work-zone})}{9}{subsection.4.4}
 \contentsline {subsection}{\numberline {4.5}Apertura del fichero (\textit {open-file})}{9}{subsection.4.5}
 \contentsline {subsection}{\numberline {4.6}Leer un p\IeC {\'\i }xel de la imagen (\textit {read-pixel})}{10}{subsection.4.6}
-\contentsline {subsection}{\numberline {4.7}Aplicar filtro (\textit {apply-filter})}{10}{subsection.4.7}
+\contentsline {subsection}{\numberline {4.7}Comprobaci\IeC {\'o}n del p\IeC {\'\i }xel (\textit {check-pixel})}{10}{subsection.4.7}
+\contentsline {subsection}{\numberline {4.8}Aplicar filtro (\textit {apply-filter})}{11}{subsection.4.8}
 \contentsline {section}{Referencias}{13}{section*.2}

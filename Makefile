@@ -10,12 +10,12 @@ CC := mpicc
 RUN := mpirun
 EMPLONUM := -DEMPLOYEES_NUMBER=$$employees
 
-all : dirs main
+all : dirs compile
 
 dirs:
 	mkdir -p $(DIREXE)
 
-main:
+compile:
 	@read -p "[X] Introduzca la cantidad de trabajadores: " employees;\
 	$(CC) $(DIRSRC)pract2.c $(CFLAGS) $(LDLIBS) $(EMPLONUM) -o $(DIREXE)pract2
 

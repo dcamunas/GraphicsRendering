@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.10)  28 APR 2020 21:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.3.10)  28 APR 2020 23:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1274,12 +1274,12 @@ LaTeX Info: Redefining \nameref on input line 158.
  ABD: EveryShipout initializing macros
 LaTeX Info: Redefining \. on input line 158.
 LaTeX Info: Redefining \% on input line 158.
-<images/uclm.jpg, id=87, 272.6988pt x 170.3163pt>
+<images/uclm.jpg, id=91, 272.6988pt x 170.3163pt>
 File: images/uclm.jpg Graphic file (type jpg)
 <use images/uclm.jpg>
 Package pdftex.def Info: images/uclm.jpg  used on input line 166.
 (pdftex.def)             Requested size: 136.34906pt x 85.15793pt.
-<images/open-mpi.png, id=88, 225.84375pt x 210.7875pt>
+<images/open-mpi.png, id=92, 225.84375pt x 210.7875pt>
 File: images/open-mpi.png Graphic file (type png)
 <use images/open-mpi.png>
 Package pdftex.def Info: images/open-mpi.png  used on input line 168.
@@ -1304,12 +1304,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 246--248
 
  []
 
-<images/pixeles.jpg, id=127, 562.1pt x 457.71pt>
+<images/pixeles.jpg, id=132, 562.1pt x 457.71pt>
 File: images/pixeles.jpg Graphic file (type jpg)
 <use images/pixeles.jpg>
 Package pdftex.def Info: images/pixeles.jpg  used on input line 256.
 (pdftex.def)             Requested size: 199.16928pt x 162.1774pt.
-<images/cat.png, id=128, 323.2075pt x 327.2225pt>
+<images/cat.png, id=133, 323.2075pt x 327.2225pt>
 File: images/cat.png Graphic file (type png)
 <use images/cat.png>
 Package pdftex.def Info: images/cat.png  used on input line 260.
@@ -1320,9 +1320,26 @@ has been already used, duplicate ignored
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.265 \clearpage
-                 <./images/pixeles.jpg> <./images/cat.png>] [4
+                 <./images/pixeles.jpg> <./images/cat.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 290--291
 
-] [5]
+ []
+
+[4
+
+]
+<images/flujo.PNG, id=149, 415.5525pt x 375.4025pt>
+File: images/flujo.PNG Graphic file (type png)
+<use images/flujo.PNG>
+Package pdftex.def Info: images/flujo.PNG  used on input line 297.
+(pdftex.def)             Requested size: 341.43306pt x 308.4564pt.
+ [5pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.305 \newpage
+               <./images/flujo.PNG>]
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
@@ -1330,43 +1347,32 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 313.
+nput line 324.
  (./code/main.c
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 1.
 
 [6]) [7] (./code/receive_points.c) (./code/calculate_file_lines.c) [8]
 (./code/assign_work_zone.c) (./code/open_file.c) [9] (./code/read_pixel.c)
-[10] (./code/apply_filter.c [11]) [12] (./Memoria.bbl
-Underfull \hbox (badness 10000) in paragraph at lines 4--6
-[][]$\OT1/cmtt/m/n/10.95 https : / / lsi . ugr . es / jmantas / ppr / ayuda / m
-pi _ ayuda . php ? ayuda = MPI _ Comm _ rank$[]\OT1/cmr/m/n/10.95 .
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 8--10
-[][]$\OT1/cmtt/m/n/10.95 https : / / lsi . ugr . es / jmantas / ppr / ayuda / m
-pi _ ayuda . php ? ayuda = MPI _ Comm _ size$[]\OT1/cmr/m/n/10.95 .
- []
-
-) [13]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 384.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 384.
+(./code/check_pixel.c) [10] (./code/apply_filter.c [11]) [12] (./Memoria.bbl)
+[13]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 394.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 394.
  (./Memoria.aux
 LaTeX Info: Redefining \. on input line 24.
 LaTeX Info: Redefining \% on input line 24.
 )
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 384.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 384.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 394.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 394.
 Package rerunfilecheck Info: File `Memoria.out' has not changed.
-(rerunfilecheck)             Checksum: D29BB0A193E4960056FE41A07BDAF103;1066.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 384.
+(rerunfilecheck)             Checksum: 98071F3A21B12CECFEDCB5E7B786D9AC;1160.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 394.
  ) 
 Here is how much of TeX's memory you used:
- 22321 strings out of 492982
- 388033 string characters out of 6134896
- 672703 words of memory out of 5000000
- 25290 multiletter control sequences out of 15000+600000
+ 22343 strings out of 492982
+ 388338 string characters out of 6134896
+ 628792 words of memory out of 5000000
+ 25295 multiletter control sequences out of 15000+600000
  13571 words of font info for 48 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,13n,78p,788b,1947s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1382,10 +1388,10 @@ ic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on Memoria.pdf (14 pages, 968429 bytes).
+Output written on Memoria.pdf (14 pages, 1045508 bytes).
 PDF statistics:
- 417 PDF objects out of 1000 (max. 8388607)
- 363 compressed objects within 4 object streams
- 176 named destinations out of 1000 (max. 500000)
- 241 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 442 PDF objects out of 1000 (max. 8388607)
+ 387 compressed objects within 4 object streams
+ 188 named destinations out of 1000 (max. 500000)
+ 254 words of extra memory for PDF output out of 10000 (max. 10000000)
 

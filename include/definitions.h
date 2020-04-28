@@ -15,7 +15,7 @@
 
 
 /* Point info */
-#define POINT_INFO_N        5
+#define PIXEL_INFO_N        5
 #define ROW                 3
 #define COLUMN              4
 #define R                   0
@@ -27,16 +27,3 @@
 #define BLACK_WHITE        'B'
 #define NEGATIVE           'N'
 #define DEFAULT            'D'
-
-/* Functions */
-int is_integer(char *variable)
-{
-    int i, is = 1;
-
-    for(i = 0; i < strlen(variable); i++)
-    {
-        if(!isdigit(variable[i])){is = 0;}
-    }
-
-    return is;
-}
