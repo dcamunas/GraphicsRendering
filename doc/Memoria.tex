@@ -290,37 +290,7 @@ En este problema encontramos dos tipos de nodos: el \textbf{\textit{rank o nodo 
 \end{itemize}
 
 
-\subsection{Algoritmos principales}
-Los algoritmos principales de esta práctica son: \textbf{la obtención de los vecinos} (de cada nodo) y \textbf{cálculo del número mínimo} de la red toroidal.
-
-\subsubsection{Obtención de los vecinos}
-Este algoritmo es fundamental en el programa, debido a que gracias a el se ve de una manera más intutiva la estructura de la red toroidal, donde cada nodo o rank conoce a sus respectivos vecinos. Cada nodo tiene un total de \textit{cuatro vecinos}, denominados: \textbf{Norte, Sur, Este y Oeste}.
-
-En concreto los vecinos Norte y Sur de cada nodo, se han obtenido gracias al uso de las filas de la red toroidal. En cambio los vecinos Este y Oeste, se han obtenido gracias a las columnas.
-
-Para saber en que posición se encuentra cada nodo o rank, dentro de la red toroidal, representada como una matriz de \textbf{LxL}. Que esta determinada por el número de fila y de columna \textbf{(fila,columna)}, por ejemplo: (0,0), (0,1), (1,0), etc.
-Para determinar el valor de la fila, se ha utilizado la división de \textbf{L} entre el \textbf{rank} \cite{mpi_rank} del nodo actual (\textbf{L/rank}). Y para obtener el valor de la columna se hace al igual que la fila, pero en este caso con el módulo (\textbf{L\%rank}).
-
-\begin{figure}[H]
-  \centering
-    \includegraphics[width=65mm]{matriz.png}
-  \caption{Representación red toroidal como una matriz.}
-  \label{fig:matriz}
-\end{figure}
-
-
-\begin{itemize}
-	\item \textit{\textbf{Vecinos Norte y Sur}}
-	\\Se han categorizado la forma de obtener estos vecinos de la siguiente forma:
-	\begin{itemize}
-		\item \textbf{Primera fila (superior)}: Esta es la fila con el valor \textit{0} de nuestra matriz, para obtener el vecino del \textit{Norte}, debemos de obtener el rank que pertenece a la última fila, y en la misma columna de nuestra matriz (representación de la red toroidal). En cambio, el vecino \textit{Sur} será el rank o nodo inmediatamente inferior al actual.
-		
-		\item \textbf{Última fila (inferior)}: Esta es la fila con el valor \textit{L - 1} de nuestra matriz, al igual que la primera fila es peculiar. Esto se debe a la forma de obtener el vecino del \textit{Sur}, dado que este sera el rank que pertenece a la primera fila y esta situado en la misma columna. En cambio el vecino del \textit{Norte}, sera el rank que este situado justo encima de el, en la misma columna.
-		
-		\item \textbf{Filas centrales (superior - inferior)}: En este tipo de filas el vecino \textit{Norte} es el vecino inmediatamente superior y el vecino \textit{Sur} es el \textit{rank} inmediatamente inferior.
-	\end{itemize}
-
-Las distintas operaciones utilizadas para obtener cada tipo de vecino, segun la posición en la que se encuentre \textit{rank} o nodo, son las siguientes:
+n las siguientes:
 \\
 
 \begin{table}[H]
