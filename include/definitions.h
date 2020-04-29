@@ -1,9 +1,8 @@
+/* My constant's */
 #include <string.h>
 #include <ctype.h>
 
 
-/* My constant's */
-//#define EMPLOYEES_NUMBER    16
 #define EXEC_PATH           "exec/pract2"
 #define MASTER_RANK         0
 #define IMAGE_SIDE          400

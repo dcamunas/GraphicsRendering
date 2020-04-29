@@ -52,4 +52,4 @@ Para la ejecución del programa se puede realizar al igual que la compilación d
 
 
 ## Resultado ejecución del programa
-![result](Images/result.png)
+![result](result.png)

@@ -1,4 +1,5 @@
 /* Pract2  RAP 09/10    Javier Ayllon*/
+/* Modificación: David Camuñas */
 
 #include <openmpi/mpi.h>
 #include <stdio.h>
