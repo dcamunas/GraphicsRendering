@@ -35,9 +35,9 @@ El proceso de compilación, se puede realizar de varias formas:
 * **Automaticamente con Makefile:** *$ make compile*   
  También con ***$ make all**** (se crearán los directorios necesarios y se compilará posteriormente)
 
-* **Manualmente:** *$ mpicc src/toroidalNet.c -I include/ -lm -o exec/toroidalNet*  
+* **Manualmente:** *$ mpicc src/pract2.c -I include/ -lx11 -DEMPLOYEES_NUMBER=8 -o exec/pract2*  
 
-Donde se puede observar la opción *-I include/* la cual define donde se encuentran las librerias propias (*definitions.h*). Y la opción *-lm* esta opción define la utilización de la libreria *-lX11*.
+Donde se puede observar la opción *-I include/* la cual define donde se encuentran las librerias propias (*definitions.h*). Y la definición la utilización de la libreria *-lX11*.
 
 
 ## Ejecución
@@ -48,7 +48,7 @@ Para la ejecución del programa se puede realizar al igual que la compilación d
   * ***$ make solution_blackwhite*** (se mostrará la imagen en blanco y negro).
   * ***$ make solution_negativo*** (se mostrará la imagen donde cada pixel se mostrará con su color complementario).  
   
-* **Manualmente:** *$ mpirun -n 1 ./exec/toroidalNet* 
+* **Manualmente:** *$ mpirun -n 1 ./exec/pract2* 
 
 
 ## Resultado ejecución del programa
