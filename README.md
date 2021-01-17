@@ -11,7 +11,7 @@ Se trata de un programa de renderizado gráfico, mediante el uso de funciones de
 Donde el programa se comenzará ejecutando con un único proceso (encargado de mostrar la imagen), proceso principal. Este proceso generará una serie de **N** procesos hijos (se encargarán del tratamiento de la imagen).
 
 
-## Requerimientos
+## Requisitos
 * Tener instalado *MPI*.
 
 * Tener instalada la libreria *libx11*  
